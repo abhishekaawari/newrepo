@@ -1,0 +1,79 @@
+<?php 
+$productCollection = $block->getProductCollection();
+$collection = $productCollection->setPageSize(10)->setCurPage(1);
+
+echo "<table border='1'>";
+echo "<tr>";
+echo "<th>Id</th>";
+echo "<th>Image</th>";
+echo "<th>Name</th>";
+echo "<th>Price</th>";
+echo "</tr>";
+
+foreach ($collection->getData() as $product){
+	$id = $product['entity_id'];
+	$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+	$image= '';
+	$product = $objectManager->create('Magento\Catalog\Model\Product')->load($id);
+	$name = $product->getName();
+	$productimages = $product->getMediaGalleryImages();
+	foreach ($productimages as $productimage) {
+		$image = $productimage['url'];
+	}
+	
+	$price = $product->getPrice();
+
+	echo "<tr>";
+	echo "<td>".$id."</td>"; ?>
+	<!-- <td><img src='<?php //echo $image; ?> ' height="100px" width="100px"/></td>  -->
+	<?php
+	if (isset($image)) {
+		if($image==""){
+			echo "<td><b><h4>No Image Available</h4></b></td>";
+		}
+		else{
+			echo "<td><img src=".$image." height='100px' width='100px'/></td>";
+		}
+	}
+	echo "<td>".$name."</td>";
+	
+	echo "<td>".$price."</td>";
+	echo "</tr>";
+    
+    //print_r($product->getData());     
+ } 
+echo "</table>";
+
+  ?>
+  <div id="result"> </div>
+  <!-- <button onclick="buttonClick();">Click Me</button> -->
+ <br><br><button id='load' onclick="buttonClick();">Load More</button>
+ <input type="hidden" id="inc" value="0"></input>
+<script>
+    var i = 1;
+    function buttonClick() {
+        i++;
+        document.getElementById('inc').value = i;
+    }
+</script>
+<script type="text/javascript">
+	require(['jquery', 'jquery/ui'], function($){
+	    // $(document).ready(function() {
+	      	$('#load').click(function() {
+		        var val1 = <?php echo count($productCollection); ?>;
+			    var val2 = $('#inc').val();
+			    alert(val2);
+			    $.ajax({
+			        type: 'POST',
+			        url: 'http://127.0.0.1/magento/collection/index/view',
+			        data: {'val2': val2 },
+
+			        success: function(response){
+			           $('#result').append(response);
+			           // alert(val1);
+			        }
+			    });
+			});
+	    // });
+	});
+</script>

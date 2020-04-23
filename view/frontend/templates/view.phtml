@@ -1,0 +1,66 @@
+<style>
+	.navigation, .breadcrumbs, .page-header .header.panel, .header.content, .footer.content, .page-wrapper.widget, .page-wrapper.page-bottom, .block.category.event, .top-container, .page-main
+	{
+		padding-left: 0px;
+		padding-right: 0px;
+	}
+</style>
+<?php 
+	$productCollection = $block->getProductCollection();
+	$post = $this->getRequest()->getParam('val2');
+	$val2 = array('val2'=>$post);	
+		if (array_key_exists('val2', $val2)) {
+		    // echo $post['val2'];
+		    $collection = $productCollection->setPageSize(5)->setCurPage($post['val2']);
+		}
+
+	// $collection = $productCollection->setPageSize(10)->setCurPage(2);
+	// if (!array_key_exists('val2', $post)) {
+	//     $page = echo $post['val2'];
+	//     $collection = $productCollection->setPageSize(10)->setCurPage($page);
+	// }
+	// else{
+	// 	$collection = $productCollection->setPageSize(10)->setCurPage(2);
+	// }
+
+
+echo "<table border='1'>";
+
+
+foreach ($collection->getData() as $product){
+	$id = $product['entity_id'];
+	$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+	$image= '';
+	$product = $objectManager->create('Magento\Catalog\Model\Product')->load($id);
+	$name = $product->getName();
+	$productimages = $product->getMediaGalleryImages();
+	foreach ($productimages as $productimage) {
+		$image = $productimage['url'];
+	}
+	
+	$price = $product->getPrice();
+
+	echo "<tr>";
+	echo "<td>".$id."</td>";
+	if (isset($image)) {
+		if($image==""){
+			echo "<td><b><h4>No Image Available</h4></b></td>";
+		}
+		else{
+			echo "<td><img src=".$image." height='100px' width='100px'/></td>";
+		
+	}
+	echo "<td>".$name."</td>";
+	
+	echo "<td>".$price."</td>";
+	echo "</tr>";  
+} 
+echo "</table>";
+
+// $post = $this->getRequest()->getParams('val2');
+// if ($post["val2"]=="") {
+// 	$post["val2"] => 1;
+// }
+
+ 
+?>

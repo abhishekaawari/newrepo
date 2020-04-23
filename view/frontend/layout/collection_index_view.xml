@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+	<head>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+		<style>
+			.navigation, .breadcrumbs, .page-header .header.panel, .header.content, .footer.content, .page-wrapper.widget, .page-wrapper.page-bottom, .block.category.event, .top-container, .page-main{
+				padding-left: 0px;
+    			padding-right: 0px;
+			}
+		</style>
+	</head>
+   
+    <body>
+		<referenceContainer name="header.container" remove="true" />
+		<referenceBlock name="navigation.sections" remove="true"/> 
+	 	<referenceContainer name="footer" remove="true" /> 
+	 	<referenceContainer name="content">
+        	<block class="Product\Collection\Block\Collection" name="vcollection" template="view.phtml" />
+    	</referenceContainer>
+	</body>
+</page>
